@@ -32,7 +32,7 @@ const Lobby = () => {
   const { joinRoom, isRoomJoined } = useRoom();
   const { initialize, me } = useHuddle01();
   const { isLobbyJoined, joinLobby, isLoading } = useLobby();
-  const [roomId, setRoomId] = useState<string>("");
+  const [roomId, setRoomId] = useState("");
 
   useEffect(() => {
     if (queryRoomId) {
@@ -41,12 +41,12 @@ const Lobby = () => {
   }, [queryRoomId]);
 
   useEffect(() => {
-    if (!isLobbyJoined && queryRoomId) {
+    if (!isLobbyJoined && roomId.length) {
       initialize(process.env.NEXT_PUBLIC_PROJECT_ID ?? "");
       joinLobby(roomId);
       return;
     }
-  }, [isLobbyJoined]);
+  }, [isLobbyJoined, roomId.length]);
 
   const handleStartSpaces = () => {
     if (!isLobbyJoined) return;

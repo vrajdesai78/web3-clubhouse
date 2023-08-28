@@ -13,9 +13,9 @@ import useStore from "@/store/slices";
 import { toast } from "react-hot-toast";
 import { useAppUtils } from "@huddle01/react/app-utils";
 
-const Home = ({ params }: { params: { roomId: string } }) => {
+const Home = () => {
   const { isRoomJoined } = useRoom();
-  const { push } = useRouter();
+  const { push, query } = useRouter();
   const { changePeerRole } = useAcl();
   const { me } = useHuddle01();
   const [requestedPeerId, setRequestedPeerId] = useState("");
@@ -26,6 +26,15 @@ const Home = ({ params }: { params: { roomId: string } }) => {
   const avatarUrl = useStore((state) => state.avatarUrl);
   const userDisplayName = useStore((state) => state.userDisplayName);
   const { changeAvatarUrl, setDisplayName } = useAppUtils();
+  const [roomId, setRoomId] = useState<string>("");
+
+  useEffect(() => {
+    if (query.roomId) {
+      setRoomId(query.roomId as string);
+    }
+  }, [query.roomId]);
+
+  const { roomId: queryRoomId } = query;
 
   useEventListener("room:peer-joined", ({ peerId, role }) => {
     if (role === "peer") {
@@ -39,10 +48,10 @@ const Home = ({ params }: { params: { roomId: string } }) => {
 
   useEffect(() => {
     if (!isRoomJoined) {
-      push(`/${params.roomId}/lobby`);
+      push(`/${roomId}/lobby`);
       return;
     }
-  }, []);
+  }, [isRoomJoined]);
 
   useEffect(() => {
     if (changeAvatarUrl.isCallable) {
