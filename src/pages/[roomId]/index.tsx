@@ -22,19 +22,11 @@ const Home = () => {
   const [showAcceptRequest, setShowAcceptRequest] = useState(false);
   const addRequestedPeers = useStore((state) => state.addRequestedPeers);
   const removeRequestedPeers = useStore((state) => state.removeRequestedPeers);
+  const setSpacesTitle = useStore((state) => state.setSpacesTitle);
   const requestedPeers = useStore((state) => state.requestedPeers);
   const avatarUrl = useStore((state) => state.avatarUrl);
   const userDisplayName = useStore((state) => state.userDisplayName);
   const { changeAvatarUrl, setDisplayName } = useAppUtils();
-  const [roomId, setRoomId] = useState<string>("");
-
-  useEffect(() => {
-    if (query.roomId) {
-      setRoomId(query.roomId as string);
-    }
-  }, [query.roomId]);
-
-  const { roomId: queryRoomId } = query;
 
   useEventListener("room:peer-joined", ({ peerId, role }) => {
     if (role === "peer") {
@@ -43,15 +35,16 @@ const Home = () => {
   });
 
   useEventListener("room:me-left", () => {
-    push("https://huddle01.com/docs/usecase/audio-spaces");
+    setSpacesTitle("");
+    push("/");
   });
 
   useEffect(() => {
-    if (!isRoomJoined) {
-      push(`/${roomId}/lobby`);
+    if (!isRoomJoined && query.roomId) {
+      push(`/${query.roomId}/lobby`);
       return;
     }
-  }, [isRoomJoined]);
+  }, [isRoomJoined, query.roomId]);
 
   useEffect(() => {
     if (changeAvatarUrl.isCallable) {

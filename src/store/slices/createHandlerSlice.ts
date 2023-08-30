@@ -14,6 +14,7 @@ export interface ISidebarState {
   myReaction: string;
   requestedPeers: string[];
   userDisplayName: string;
+  spacesTitle: string;
   setPromptView: (val: TPromptView) => void;
   setSidebarView: (val: TSidebarView) => void;
   setAvatarUrl: (va: string) => void;
@@ -22,6 +23,7 @@ export interface ISidebarState {
   addRequestedPeers: (val: string) => void;
   removeRequestedPeers: (val: string) => void;
   setUserDisplayName: (val: string) => void;
+  setSpacesTitle: (val: string) => void;
 }
 
 const createHandlerSlice: StoreSlice<ISidebarState> = (set, get) => ({
@@ -35,6 +37,7 @@ const createHandlerSlice: StoreSlice<ISidebarState> = (set, get) => ({
   myReaction: "",
   requestedPeers: [],
   userDisplayName: "",
+  spacesTitle: "",
 
   setSidebarView(sidebarView: TSidebarView) {
     const prevView = get().sidebar.sidebarView;
@@ -103,6 +106,12 @@ const createHandlerSlice: StoreSlice<ISidebarState> = (set, get) => ({
   setUserDisplayName: (val: string) => {
     set(() => ({
       userDisplayName: val,
+    }));
+  },
+
+  setSpacesTitle: (val: string) => {
+    set(() => ({
+      spacesTitle: val,
     }));
   }
 
