@@ -67,6 +67,7 @@ const Home = ({
               roomId={room.roomId}
               title={room.title}
               time={room.time}
+              key={room.roomId}
             />
           ))}
       </SimpleGrid>
@@ -85,6 +86,7 @@ const Home = ({
             roomId={room.roomId}
             title={room.title}
             time={room.time}
+            key={room.roomId}
           />
         ))}
       </SimpleGrid>
