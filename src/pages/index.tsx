@@ -2,8 +2,8 @@ import { contractABI } from "@/utils/contractABI";
 import { SimpleGrid, Stack, Text } from "@chakra-ui/react";
 import { InferGetServerSidePropsType } from "next";
 import { useAccount, useContractRead } from "wagmi";
-import { useState } from "react";
-import { useEffectOnce } from "usehooks-ts";
+import { useEffect, useState } from "react";
+import { useEffectOnce, useUpdateEffect } from "usehooks-ts";
 import { contractAddress } from "@/utils/constants";
 import { SpaceCards } from "@/components/common/SpaceCards";
 
@@ -47,6 +47,12 @@ const Home = ({
     functionName: "getUserMeetings",
     args: [address],
   });
+
+  useEffect(() => {
+    if (yourMeetings) {
+      console.log(yourMeetings);
+    }
+  }, [yourMeetings]);
 
   return (
     <Stack className="bg-custom-3 h-screen text-custom-7">

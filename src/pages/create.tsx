@@ -8,17 +8,35 @@ import {
   Stack,
   Image,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { contractABI } from "@/utils/contractABI";
-import { ethers } from "ethers";
 import { contractAddress } from "@/utils/constants";
+import { usePrepareContractWrite, useContractWrite } from "wagmi";
 import { useRouter } from "next/router";
 
 export default function SplitScreen() {
   const [name, setName] = useState("");
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState(new Date().toISOString());
+  const [roomId, setRoomId] = useState("");
   const { push } = useRouter();
+
+  const { config } = usePrepareContractWrite({
+    address: contractAddress,
+    abi: contractABI,
+    functionName: "scheduleMeeting",
+    args: [name, roomId, new Date(time).toISOString()],
+  });
+
+  const { write, status, data } = useContractWrite(config);
+
+  useEffect(() => {
+    if (status === "success") {
+      console.log(data);
+      toast.success("Space created successfully");
+      push(`/`);
+    }
+  }, [status]);
 
   const handleCreateSpaces = async () => {
     const response = await fetch("/api/createRoom", {
@@ -33,26 +51,16 @@ export default function SplitScreen() {
     });
     const data = await response.json();
     if (data) {
-      const provider = new ethers.providers.Web3Provider(
-        (window as any).ethereum
-      );
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(
-        contractAddress,
-        contractABI,
-        signer
-      );
-      contract
-        .scheduleMeeting(name, data.roomId, new Date(time).toISOString())
-        .then((res: string) => {
-          if (res) {
-            toast.success("Space Created Successfully");
-            push("/");
-          }
-        });
+      setRoomId(data.roomId);
     }
   };
+
+  useEffect(() => {
+    if (roomId && write) {
+      console.log("Inside");
+      write();
+    }
+  }, [roomId, write])
 
   return (
     <Stack
@@ -62,7 +70,12 @@ export default function SplitScreen() {
       textColor={"whiteAlpha.800"}
     >
       <Flex p={12} flex={1} align={"center"} justify={"center"} mt="16">
-        <Stack spacing={4} w={"full"} maxW={"md"} className="border border-custom-5 p-8 rounded-lg">
+        <Stack
+          spacing={4}
+          w={"full"}
+          maxW={"md"}
+          className="border border-custom-5 p-8 rounded-lg"
+        >
           <Heading fontSize={"2xl"}>Create Your Audio Space</Heading>
           <FormControl id="spaceName">
             <FormLabel>Title</FormLabel>
@@ -80,13 +93,15 @@ export default function SplitScreen() {
               onChange={(e) => setTime(e.target.value)}
             />
           </FormControl>
-            <Button
-              colorScheme={"blue"}
-              variant={"solid"}
-              onClick={handleCreateSpaces}
-            >
-              Create Spaces
-            </Button>
+          <Button
+            colorScheme={"blue"}
+            variant={"solid"}
+            onClick={async () => {
+              await handleCreateSpaces();
+            }}
+          >
+            Create Spaces
+          </Button>
         </Stack>
       </Flex>
       <Flex flex={1} mt="16">
