@@ -20,9 +20,12 @@ dependencies:
   '@heroicons/react':
     specifier: ^2.0.18
     version: 2.0.18(react@18.2.0)
+  '@huddle01/auth':
+    specifier: ^0.0.2
+    version: 0.0.2
   '@huddle01/react':
-    specifier: ^0.0.13
-    version: 0.0.13(@types/react@18.2.21)
+    specifier: 0.0.14-beta.1
+    version: 0.0.14-beta.1(@types/react@18.2.21)
   '@radix-ui/react-dropdown-menu':
     specifier: ^2.0.5
     version: 2.0.5(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
@@ -1546,10 +1549,22 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@huddle01/react@0.0.13(@types/react@18.2.21):
-    resolution: {integrity: sha512-52+OBg+/Qs+g5b6Yi0lf6kmdZIKKKfMxfR7Lt+6TWNNwY/uBDg0dUEhifjQx8SzDeuyiMTe3Sy/Wf8H6h//lpg==}
+  /@huddle01/auth@0.0.2:
+    resolution: {integrity: sha512-G+MR+VJhOvrJ7GmCP3gFbrjet8rxb5z6//ND1XKXkKKVNPxwURQyXAwFau7BRkV+leYzUB9YFhsgLQ6wH7dgnA==}
     dependencies:
-      '@huddle01/web-core': 0.0.15
+      '@trpc/client': 10.38.1(@trpc/server@10.38.1)
+      '@trpc/server': 10.38.1
+      axios: 1.4.0
+      superjson: 1.13.1
+      zod: 3.21.4
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /@huddle01/react@0.0.14-beta.1(@types/react@18.2.21):
+    resolution: {integrity: sha512-1GO2n6GCQMR2hogD6UKeXPuebpQGR3uVY+RtSCjLf+yeUo6xrDASwMzGh9b9TWNWMjmaDSHKvsMxksHqQa5J8A==}
+    dependencies:
+      '@huddle01/web-core': 0.0.16-beta.2
       jotai: 2.4.0(@types/react@18.2.21)(react@18.2.0)
       react: 18.2.0
       ws: 8.13.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
@@ -1561,8 +1576,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@huddle01/web-core@0.0.15:
-    resolution: {integrity: sha512-NV5Asv+nRYmGRqTN6me01SF6DxSBGXdQAIKCkdFEnttpcFkwvBDlz1VrgtU0AR/18JPNcyEWw9q4wNdDAq1ifg==}
+  /@huddle01/web-core@0.0.16-beta.2:
+    resolution: {integrity: sha512-fQ+IoQzw5Ph3rrD1m6HCnVSxvc2aB1X551Nmf0MSUgMqndiqNdepOV0FhdOcIbOl7HgUoOWAwM/F7Y70s5s99g==}
     dependencies:
       axios: 1.4.0
       mediasoup-client: 3.6.100
@@ -2637,6 +2652,18 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
+
+  /@trpc/client@10.38.1(@trpc/server@10.38.1):
+    resolution: {integrity: sha512-kY7ZV7Eco5SeFIGJX6OBg7AAKkiMt5+1N+GC7N1lTZszrw95ZiNgtkZ5TI6+Un4O+RqrOcqqast6MeExCoyZhQ==}
+    peerDependencies:
+      '@trpc/server': 10.38.1
+    dependencies:
+      '@trpc/server': 10.38.1
+    dev: false
+
+  /@trpc/server@10.38.1:
+    resolution: {integrity: sha512-59mM0Jk3cnWBExSv4Z4cw/776MPwa+rcVNywnV5gyHyK/p5qHtis1b1JPYdTEQZ0zhR+6zeto14rTR51hg+Nuw==}
     dev: false
 
   /@ts-morph/common@0.11.1:
@@ -4086,6 +4113,13 @@ packages:
 
   /convert-source-map@1.9.0:
     resolution: {integrity: sha512-ASFBup0Mz1uyiIjANan1jzLQami9z1PoYSZCiiYW2FczPbenXc45FZdBZLzOT+r6+iciuEModtmCti+hjaAk0A==}
+    dev: false
+
+  /copy-anything@3.0.5:
+    resolution: {integrity: sha512-yCEafptTtb4bk7GLEQoM8KVJpxAfdBJYaXyzQEgQQQgYrZiDp8SJmGKlYza6CYjEDNstAdNdKA3UuoULlEbS6w==}
+    engines: {node: '>=12.13'}
+    dependencies:
+      is-what: 4.1.15
     dev: false
 
   /copy-to-clipboard@3.3.3:
@@ -5684,6 +5718,11 @@ packages:
       get-intrinsic: 1.2.1
     dev: false
 
+  /is-what@4.1.15:
+    resolution: {integrity: sha512-uKua1wfy3Yt+YqsD6mTUEa2zSi3G1oPlqTflgaPJ7z63vUGN5pxFpnQfeSLMFnJDEsdvOtkp1rUWkYjB4YfhgA==}
+    engines: {node: '>=12.13'}
+    dev: false
+
   /isarray@2.0.5:
     resolution: {integrity: sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==}
     dev: false
@@ -7181,6 +7220,13 @@ packages:
       mz: 2.7.0
       pirates: 4.0.6
       ts-interface-checker: 0.1.13
+    dev: false
+
+  /superjson@1.13.1:
+    resolution: {integrity: sha512-AVH2eknm9DEd3qvxM4Sq+LTCkSXE2ssfh1t11MHMXyYXFQyQ1HLgVvV+guLTsaQnJU3gnaVo34TohHPulY/wLg==}
+    engines: {node: '>=10'}
+    dependencies:
+      copy-anything: 3.0.5
     dev: false
 
   /superstruct@0.14.2:

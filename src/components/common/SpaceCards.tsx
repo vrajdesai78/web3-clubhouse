@@ -8,7 +8,7 @@ import useStore from "@/store/slices";
 interface SpaceCardsProps {
   roomId: string;
   title: string;
-  time: string;
+  time?: string;
 }
 
 export const SpaceCards: React.FC<SpaceCardsProps> = ({ roomId, title, time }) => {
@@ -38,7 +38,7 @@ export const SpaceCards: React.FC<SpaceCardsProps> = ({ roomId, title, time }) =
           type="button"
           bgColor={"blue.500"}
           onClick={() => {
-            if (calculateRemainingTime(time) === "Start Spaces") {
+            if (calculateRemainingTime(time!) === "Start Spaces") {
               setSpacesTitle(title);
               push(`/${roomId}/lobby`);
             } else {
@@ -49,7 +49,7 @@ export const SpaceCards: React.FC<SpaceCardsProps> = ({ roomId, title, time }) =
             bg: "gray.300",
           }}
         >
-          {calculateRemainingTime(time)}
+          {time ? calculateRemainingTime(time) : "Join Spaces"}
         </Button>
       </div>
     </Box>

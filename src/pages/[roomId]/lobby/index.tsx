@@ -1,6 +1,8 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { getAccessToken, getMessage } from "@huddle01/auth";
+import { useSignMessage, useAccount } from "wagmi";
 
 // Assets
 import { toast } from "react-hot-toast";
@@ -15,10 +17,23 @@ import useStore from "@/store/slices";
 
 // Hooks
 import { useHuddle01, useLobby, useRoom } from "@huddle01/react/hooks";
+import { useEffectOnce } from "usehooks-ts";
 
 const Lobby = () => {
   // Local States
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { address } = useAccount();
+  const setAccessToken = useStore((state) => state.setAccessToken);
+  const accessToken = useStore((state) => state.accessToken);
+
+  // Sign Message Hook
+  const { signMessage } = useSignMessage({
+    onSuccess: async (message) => {
+      const token = await getAccessToken(message, address as `0x${string}`);
+      setAccessToken(token.accessToken);
+    },
+  });
+
   const avatarUrl = useStore((state) => state.avatarUrl);
   const setAvatarUrl = useStore((state) => state.setAvatarUrl);
   const setUserDisplayName = useStore((state) => state.setUserDisplayName);
@@ -30,9 +45,14 @@ const Lobby = () => {
 
   // Huddle Hooks
   const { joinRoom, isRoomJoined } = useRoom();
-  const { initialize, me } = useHuddle01();
+  const { initialize } = useHuddle01();
   const { isLobbyJoined, joinLobby, isLoading } = useLobby();
   const [roomId, setRoomId] = useState("");
+
+  const getUserAccessToken = async () => {
+    const msg = await getMessage(address as string);
+    signMessage({ message: msg.message });
+  };
 
   useEffect(() => {
     if (queryRoomId) {
@@ -43,10 +63,17 @@ const Lobby = () => {
   useEffect(() => {
     if (!isLobbyJoined && roomId.length) {
       initialize(process.env.NEXT_PUBLIC_PROJECT_ID ?? "");
-      joinLobby(roomId);
+      getUserAccessToken();
       return;
     }
   }, [isLobbyJoined, roomId.length]);
+
+  useEffect(() => {
+    if (accessToken) {
+      console.log(accessToken);
+      joinLobby(roomId, accessToken);
+    }
+  }, [accessToken]);
 
   const handleStartSpaces = () => {
     if (!isLobbyJoined) return;

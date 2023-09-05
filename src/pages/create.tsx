@@ -8,6 +8,10 @@ import {
   Stack,
   Image,
   DarkMode,
+  Checkbox,
+  Radio,
+  RadioGroup,
+  Select,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -20,6 +24,11 @@ export default function SplitScreen() {
   const [name, setName] = useState("");
   const [time, setTime] = useState(new Date().toISOString());
   const [roomId, setRoomId] = useState("");
+  const [isTokenGate, setIsTokenGate] = useState(false);
+  const [tokenGateCondition, setTokenGateCondition] = useState("NFT");
+  const [tokenGateConditionType, setTokenGateConditionType] = useState("");
+  const [tokenGateConditionValue, setTokenGateConditionValue] = useState("");
+  const [chain, setChain] = useState("ETHEREUM");
   const { push } = useRouter();
 
   const { config } = usePrepareContractWrite({
@@ -45,12 +54,18 @@ export default function SplitScreen() {
       body: JSON.stringify({
         title: name,
         startTime: new Date(time).toISOString(),
+        isTokenGate: isTokenGate,
+        tokenGateCondition: tokenGateCondition,
+        tokenGateConditionType: tokenGateConditionType,
+        tokenGateConditionValue: tokenGateConditionValue,
+        chain: chain,
       }),
       headers: {
         "Content-Type": "application/json",
       },
     });
     const data = await response.json();
+    console.log(data);
     if (data) {
       setRoomId(data.roomId);
     }
@@ -95,6 +110,108 @@ export default function SplitScreen() {
                 onChange={(e) => setTime(e.target.value)}
               />
             </FormControl>
+            <FormControl id="isTokenGate">
+              <Checkbox
+                onChange={() => setIsTokenGate((prev) => !prev)}
+                checked={isTokenGate}
+              >
+                Token Gate Spaces
+              </Checkbox>
+            </FormControl>
+
+            <FormControl id="token-gate-type">
+              <FormLabel>Token Gate With</FormLabel>
+              <RadioGroup
+                onChange={(condition) => {
+                  setTokenGateCondition(condition);
+                }}
+                value={tokenGateCondition}
+                className="border p-2 rounded-lg"
+              >
+                <Stack direction="row">
+                  <Radio value={"NFT"}>NFT</Radio>
+                  <Radio value={"POAP"}>POAP</Radio>
+                  <Radio value={"LENS"}>Lens</Radio>
+                  <Radio value={"CYBERCONNECT"}>CyberConnect</Radio>
+                </Stack>
+              </RadioGroup>
+            </FormControl>
+
+            {tokenGateCondition === "NFT" && (
+              <FormControl id="select-chain">
+                <FormLabel>Select Chain</FormLabel>
+                <Select
+                  placeholder="Select Chain"
+                  onChange={(e) => setChain(e.target.value)}
+                >
+                  <option value="ETHEREUM">Ethereum</option>
+                  <option value="POLYGON">Polygon</option>
+                  <option value="ARBITRUM">Arbitrum</option>
+                </Select>
+              </FormControl>
+            )}
+
+            {tokenGateCondition === "LENS" && (
+              <FormControl id="select-lens-condition">
+                <FormLabel>Select Condition</FormLabel>
+                <Select
+                  placeholder="Select Condition"
+                  onChange={(e) => setTokenGateConditionType(e.target.value)}
+                  value={tokenGateConditionType}
+                >
+                  <option value="HAVE_HANDLE">Have Lens Handle</option>
+                  <option value="FOLLOW_HANDLE">Follow Lens Handle</option>
+                  <option value="MIRROR_POST">Mirror a Post</option>
+                  <option value="COLLECT_POST">Collect a Post</option>
+                </Select>
+              </FormControl>
+            )}
+
+            {tokenGateCondition === "CYBERCONNECT" && (
+              <FormControl id="select-lens-condition">
+                <FormLabel>Select Condition</FormLabel>
+                <Select
+                  placeholder="Select Condition"
+                  onChange={(e) => setTokenGateConditionType(e.target.value)}
+                  value={tokenGateConditionType}
+                >
+                  <option value="HAVE_HANDLE">Have Cyberconnect Handle</option>
+                  <option value="FOLLOW_HANDLE">
+                    Follow Cyberconnect Profile
+                  </option>
+                </Select>
+              </FormControl>
+            )}
+
+            {!["HAVE_HANDLE", "HAVE_CYBERCONNECT_HANDLE"].includes(
+              tokenGateConditionType
+            ) && (
+              <FormControl id="token-gate-value">
+                <FormLabel>
+                  {["NFT", "POAP"].includes(tokenGateCondition)
+                    ? "Contract Address"
+                    : tokenGateCondition === "LENS"
+                    ? tokenGateConditionType === "FOLLOW_HANDLE"
+                      ? "Enter Lens Handle"
+                      : "Enter Post Link"
+                    : "Enter Follower Profile"}
+                </FormLabel>
+                <Input
+                  type="text"
+                  placeholder={
+                    ["NFT", "POAP"].includes(tokenGateCondition)
+                      ? "Enter Contract Address"
+                      : tokenGateCondition === "LENS"
+                      ? tokenGateConditionType === "FOLLOW_HANDLE"
+                        ? "Enter Lens Handle e.g. huddle01.lens"
+                        : "Paste lenster link e.g. https://lenster.xyz/posts/.."
+                      : "Enter Follower Profile"
+                  }
+                  onChange={(e) => setTokenGateConditionValue(e.target.value)}
+                />
+              </FormControl>
+            )}
+
             <Button
               variant={"solid"}
               bgColor={"blue.500"}

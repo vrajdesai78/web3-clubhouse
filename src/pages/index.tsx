@@ -85,7 +85,6 @@ const Home = ({
           <SpaceCards
             roomId={room.roomId}
             title={room.title}
-            time={room.time}
             key={room.roomId}
           />
         ))}
