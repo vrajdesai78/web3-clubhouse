@@ -36,7 +36,7 @@ export const SpaceCards: React.FC<SpaceCardsProps> = ({ roomId, title, time }) =
         <Button
           className="flex items-center justify-center"
           type="button"
-          colorScheme={"blue"}
+          bgColor={"blue.500"}
           onClick={() => {
             if (calculateRemainingTime(time) === "Start Spaces") {
               setSpacesTitle(title);

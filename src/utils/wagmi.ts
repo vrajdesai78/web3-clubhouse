@@ -2,21 +2,6 @@ import { configureChains, createConfig } from "wagmi";
 import { polygonMumbai } from "wagmi/chains";
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum';
 
-const modeTestnet = {
-    id: 919,
-    name: "Mode Testnet",
-    network: "Mode Testnet",
-    nativeCurrency: {
-      decimals: 18,
-      name: "Mode",
-      symbol: "ETH",
-    },
-    rpcUrls: {
-      default: { http: ["https://sepolia.mode.network/"] },
-    },
-    testnet: true,
-  };
-
 const supportedChains = [polygonMumbai];
 
 const { publicClient } = configureChains(

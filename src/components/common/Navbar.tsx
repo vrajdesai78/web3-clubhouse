@@ -8,7 +8,6 @@ import useStore from "@/store/slices";
 type NavbarProps = {};
 
 const Navbar: React.FC<NavbarProps> = () => {
-
   const { push } = useRouter();
   const { spacesTitle } = useStore();
 
@@ -25,10 +24,14 @@ const Navbar: React.FC<NavbarProps> = () => {
       />
       <div className="text-2xl ml-32 font-bold">{spacesTitle}</div>
       <div className="flex items-center gap-4">
-        <Button colorScheme={"blue"} variant={"solid"} onClick={() => push("/create")}>
+        <Button
+          bgColor={"blue.500"}
+          variant={"solid"}
+          onClick={() => push("/create")}
+        >
           Create Spaces
         </Button>
-      <Web3Button />
+        <Web3Button />
       </div>
     </header>
   );
