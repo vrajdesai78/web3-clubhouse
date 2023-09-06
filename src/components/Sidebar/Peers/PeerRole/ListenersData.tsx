@@ -37,7 +37,7 @@ const ListenersData: React.FC<ListenersDataProps> = ({ peerId }) => {
           />
           <Strip
             type="leave"
-            title="Remove from spaces"
+            title="Remove from room"
             variant="danger"
             onClick={() => {
               kickPeer(peerId);
@@ -48,7 +48,7 @@ const ListenersData: React.FC<ListenersDataProps> = ({ peerId }) => {
         <div>
           <Strip
             type="leave"
-            title="Leave the spaces"
+            title="Leave the room"
             variant="danger"
             onClick={() => {
               leaveRoom();

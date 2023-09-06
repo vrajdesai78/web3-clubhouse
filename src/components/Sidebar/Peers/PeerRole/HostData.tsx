@@ -17,7 +17,7 @@ const HostData: React.FC<HostDataProps> = ({ peerId }) => {
         <div>
           <Strip
             type="close"
-            title="End spaces for all"
+            title="End room for all"
             variant="danger"
             onClick={() => {
               endRoom();
@@ -25,7 +25,7 @@ const HostData: React.FC<HostDataProps> = ({ peerId }) => {
           />
           <Strip
             type="leave"
-            title="Leave the spaces"
+            title="Leave the room"
             variant="danger"
             onClick={() => {
               leaveRoom();

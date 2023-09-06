@@ -71,7 +71,7 @@ const Lobby = () => {
       }
       return;
     }
-  }, [isLobbyJoined]);
+  }, [isLobbyJoined, roomId]);
 
   useEffect(() => {
     if (accessToken && roomId) {
@@ -189,7 +189,7 @@ const Lobby = () => {
             className="flex items-center justify-center bg-[#246BFD] text-slate-100 rounded-md p-2 mt-2 w-full"
             onClick={handleStartSpaces}
           >
-            {isLoading ? "Loading..." : "Start Spaces"}
+            {isLoading ? "Loading..." : "Start Room"}
             <Image
               alt="narrow-right"
               width={30}

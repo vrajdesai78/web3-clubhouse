@@ -1,8 +1,8 @@
 import { configureChains, createConfig } from "wagmi";
-import { polygonMumbai } from "wagmi/chains";
+import { filecoinCalibration } from "wagmi/chains";
 import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum';
 
-const supportedChains = [polygonMumbai];
+const supportedChains = [filecoinCalibration];
 
 const { publicClient } = configureChains(
     // @ts-ignore

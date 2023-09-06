@@ -38,7 +38,7 @@ export const SpaceCards: React.FC<SpaceCardsProps> = ({ roomId, title, time }) =
           type="button"
           bgColor={"blue.500"}
           onClick={() => {
-            if (calculateRemainingTime(time!) === "Start Spaces") {
+            if (calculateRemainingTime(time!) === "Start Room") {
               setSpacesTitle(title);
               push(`/${roomId}/lobby`);
             } else {
@@ -49,7 +49,7 @@ export const SpaceCards: React.FC<SpaceCardsProps> = ({ roomId, title, time }) =
             bg: "gray.300",
           }}
         >
-          {time ? calculateRemainingTime(time) : "Join Spaces"}
+          {time ? calculateRemainingTime(time) : "Join Room"}
         </Button>
       </div>
     </Box>

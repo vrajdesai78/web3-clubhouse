@@ -43,7 +43,7 @@ export default function SplitScreen() {
     if (status === "success") {
       console.log(data);
       toast.success("Space created successfully");
-      push(`/`);
+      window.location.href = "/";
     }
   }, [status]);
 
@@ -90,7 +90,7 @@ export default function SplitScreen() {
             maxW={"md"}
             className="border border-custom-5 p-8 rounded-lg"
           >
-            <Heading fontSize={"2xl"}>Create Your Audio Space</Heading>
+            <Heading fontSize={"2xl"}>Create Room for Data DAOs</Heading>
             <FormControl id="spaceName">
               <FormLabel>Title</FormLabel>
               <Input
@@ -114,7 +114,7 @@ export default function SplitScreen() {
                 onChange={() => setIsTokenGate((prev) => !prev)}
                 checked={isTokenGate}
               >
-                Token Gate Spaces
+                Token Gate Room
               </Checkbox>
             </FormControl>
 

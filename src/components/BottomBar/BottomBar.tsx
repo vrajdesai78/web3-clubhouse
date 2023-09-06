@@ -110,7 +110,7 @@ const BottomBar: React.FC<BottomBarProps> = () => {
           >
             {me.role === "host" && <Strip
               type="close"
-              title="End spaces for all"
+              title="End Room for all"
               variant="danger"
               onClick={() => {
                 endRoom();
@@ -118,7 +118,7 @@ const BottomBar: React.FC<BottomBarProps> = () => {
             />}
             <Strip
               type="leave"
-              title="Leave the spaces"
+              title="Leave the room"
               variant="danger"
               onClick={() => {
                 leaveRoom();

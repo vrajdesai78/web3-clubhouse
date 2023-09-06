@@ -10,7 +10,7 @@ export const calculateRemainingTime = (time: string) => {
   const targetTime = new Date(time);
   const timeDifference = targetTime.getTime() - now.getTime();
   if (timeDifference <= 0) {
-    return `Start Spaces`;
+    return `Start Room`;
   }
   const hours = Math.floor(timeDifference / (1000 * 60 * 60));
   const minutes = Math.floor(
@@ -27,7 +27,7 @@ export const calculateRemainingTime = (time: string) => {
   }
 
   if (hours === 0 && minutes === 0) {
-    result = `Start Spaces`;
+    result = `Start Room`;
   }
 
   return result;

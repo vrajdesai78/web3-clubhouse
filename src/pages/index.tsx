@@ -51,7 +51,7 @@ const Home = ({
   return (
     <Stack className="bg-custom-3 h-screen text-custom-7">
       <Text className="flex mt-20 items-center justify-center text-2xl font-bold">
-        Your Spaces
+        Your Rooms
       </Text>
       <SimpleGrid
         columns={4}
@@ -72,7 +72,7 @@ const Home = ({
           ))}
       </SimpleGrid>
       <div className="flex items-center justify-center text-2xl font-bold">
-        Live Spaces
+        Ongoing Discussion Rooms
       </div>
       <SimpleGrid
         columns={4}

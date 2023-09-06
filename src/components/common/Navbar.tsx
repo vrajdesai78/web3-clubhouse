@@ -21,6 +21,7 @@ const Navbar: React.FC<NavbarProps> = () => {
         className="object-contain"
         quality={100}
         priority
+        onClick={() => push("/")}
       />
       <div className="text-2xl ml-32 font-bold">{spacesTitle}</div>
       <div className="flex items-center gap-4">
@@ -29,7 +30,7 @@ const Navbar: React.FC<NavbarProps> = () => {
           variant={"solid"}
           onClick={() => push("/create")}
         >
-          Create Spaces
+          Create Room
         </Button>
         <Web3Button />
       </div>
