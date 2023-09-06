@@ -18,35 +18,12 @@ export default async function handler(
       title: req.body.title,
       startTime: req.body.startTime,
       ...(req.body.isTokenGate && {
-        ...(req.body.tokenGateCondition === "NFT"
-          ? {
-              tokenType: "ERC721",
-              chain: req.body.chain,
-              contractAddress: [req.body.tokenGateConditionValue],
-            }
-          : req.body.tokenGateCondition === "LENS"
-          ? {
-              tokenType: "LENS",
-              chain: "POLYGON",
-              conditionType: req.body.tokenGateConditionType,
-              ...(req.body.tokenGateConditionType !== "HAVE_HANDLE" && {
-                conditionValue: req.body.tokenGateConditionValue,
-              }),
-            }
-          : req.body.tokenGateCondition === "CYBERCONNECT"
-          ? {
-              tokenType: "CYBERCONNECT",
-              chain: "BSC",
-              conditionType: req.body.tokenGateConditionType,
-              ...(req.body.tokenGateConditionType !== "HAVE_HANDLE" && {
-                conditionValue: req.body.tokenGateConditionValue,
-              }),
-            }
-          : {
-              tokenType: "POAP",
-              chain: "ETHEREUM",
-              contractAddress: [req.body.tokenGateConditionValue],
-            }),
+        tokenType: req.body.tokenType,
+        chain: req.body.chain,
+        contractAddress: [req.body.contractAddress],
+        ...(req.body.tokenType === "ERC1155" && {
+          conditionValue: req.body.tokenId,
+        }),
       }),
     }),
     headers: {

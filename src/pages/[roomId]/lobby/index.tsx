@@ -17,7 +17,6 @@ import useStore from "@/store/slices";
 
 // Hooks
 import { useHuddle01, useLobby, useRoom } from "@huddle01/react/hooks";
-import { useEffectOnce } from "usehooks-ts";
 
 const Lobby = () => {
   // Local States
@@ -57,20 +56,25 @@ const Lobby = () => {
   useEffect(() => {
     if (queryRoomId) {
       setRoomId(queryRoomId as string);
+    } else {
+      push("/");
     }
   }, [queryRoomId]);
 
   useEffect(() => {
-    if (!isLobbyJoined && roomId.length) {
+    if (!isLobbyJoined && roomId) {
       initialize(process.env.NEXT_PUBLIC_PROJECT_ID ?? "");
-      getUserAccessToken();
+      if (!accessToken) {
+        getUserAccessToken();
+      } else {
+        joinLobby(roomId, accessToken);
+      }
       return;
     }
-  }, [isLobbyJoined, roomId.length]);
+  }, [isLobbyJoined]);
 
   useEffect(() => {
-    if (accessToken) {
-      console.log(accessToken);
+    if (accessToken && roomId) {
       joinLobby(roomId, accessToken);
     }
   }, [accessToken]);

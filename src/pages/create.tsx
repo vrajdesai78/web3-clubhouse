@@ -16,7 +16,7 @@ import {
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { contractABI } from "@/utils/contractABI";
-import { contractAddress } from "@/utils/constants";
+import { contractAddress as NFTContractAddress } from "@/utils/constants";
 import { usePrepareContractWrite, useContractWrite } from "wagmi";
 import { useRouter } from "next/router";
 
@@ -25,14 +25,13 @@ export default function SplitScreen() {
   const [time, setTime] = useState(new Date().toISOString());
   const [roomId, setRoomId] = useState("");
   const [isTokenGate, setIsTokenGate] = useState(false);
-  const [tokenGateCondition, setTokenGateCondition] = useState("NFT");
-  const [tokenGateConditionType, setTokenGateConditionType] = useState("");
-  const [tokenGateConditionValue, setTokenGateConditionValue] = useState("");
+  const [contractAddress, setContractAddress] = useState("");
+  const [tokenType, setTokenType] = useState("ERC721");
   const [chain, setChain] = useState("ETHEREUM");
   const { push } = useRouter();
 
   const { config } = usePrepareContractWrite({
-    address: contractAddress,
+    address: NFTContractAddress,
     abi: contractABI,
     functionName: "scheduleMeeting",
     args: [name, roomId, new Date(time).toISOString()],
@@ -55,9 +54,8 @@ export default function SplitScreen() {
         title: name,
         startTime: new Date(time).toISOString(),
         isTokenGate: isTokenGate,
-        tokenGateCondition: tokenGateCondition,
-        tokenGateConditionType: tokenGateConditionType,
-        tokenGateConditionValue: tokenGateConditionValue,
+        tokenType: tokenType,
+        contractAddress: contractAddress,
         chain: chain,
       }),
       headers: {
@@ -73,7 +71,6 @@ export default function SplitScreen() {
 
   useEffect(() => {
     if (roomId && write) {
-      console.log("Inside");
       write();
     }
   }, [roomId, write]);
@@ -102,6 +99,7 @@ export default function SplitScreen() {
                 onChange={(e) => setName(e.target.value)}
               />
             </FormControl>
+
             <FormControl id="spaceTime">
               <FormLabel>Start Time</FormLabel>
               <Input
@@ -110,6 +108,7 @@ export default function SplitScreen() {
                 onChange={(e) => setTime(e.target.value)}
               />
             </FormControl>
+
             <FormControl id="isTokenGate">
               <Checkbox
                 onChange={() => setIsTokenGate((prev) => !prev)}
@@ -119,99 +118,58 @@ export default function SplitScreen() {
               </Checkbox>
             </FormControl>
 
-            <FormControl id="token-gate-type">
-              <FormLabel>Token Gate With</FormLabel>
-              <RadioGroup
-                onChange={(condition) => {
-                  setTokenGateCondition(condition);
-                }}
-                value={tokenGateCondition}
-                className="border p-2 rounded-lg"
-              >
-                <Stack direction="row">
-                  <Radio value={"NFT"}>NFT</Radio>
-                  <Radio value={"POAP"}>POAP</Radio>
-                  <Radio value={"LENS"}>Lens</Radio>
-                  <Radio value={"CYBERCONNECT"}>CyberConnect</Radio>
-                </Stack>
-              </RadioGroup>
-            </FormControl>
+            {isTokenGate && 
+              <>
+                <FormControl id="token-gate-type">
+                  <FormLabel>Token Gate With</FormLabel>
+                  <RadioGroup
+                    onChange={(condition) => {
+                      setTokenType(condition);
+                    }}
+                    value={tokenType}
+                    className="border p-2 rounded-lg"
+                  >
+                    <Stack direction="row">
+                      <Radio value={"ERC20"}>ERC20</Radio>
+                      <Radio value={"ERC721"}>ERC721</Radio>
+                      <Radio value={"ERC1155"}>ERC1155</Radio>
+                    </Stack>
+                  </RadioGroup>
+                </FormControl>
 
-            {tokenGateCondition === "NFT" && (
-              <FormControl id="select-chain">
-                <FormLabel>Select Chain</FormLabel>
-                <Select
-                  placeholder="Select Chain"
-                  onChange={(e) => setChain(e.target.value)}
-                >
-                  <option value="ETHEREUM">Ethereum</option>
-                  <option value="POLYGON">Polygon</option>
-                  <option value="ARBITRUM">Arbitrum</option>
-                </Select>
-              </FormControl>
-            )}
+                <FormControl id="select-chain">
+                  <FormLabel>Select Chain</FormLabel>
+                  <Select
+                    placeholder="Select Chain"
+                    onChange={(e) => setChain(e.target.value)}
+                  >
+                    <option value="ETHEREUM">Ethereum</option>
+                    <option value="POLYGON">Polygon</option>
+                    <option value="ARBITRUM">Arbitrum</option>
+                  </Select>
+                </FormControl>
 
-            {tokenGateCondition === "LENS" && (
-              <FormControl id="select-lens-condition">
-                <FormLabel>Select Condition</FormLabel>
-                <Select
-                  placeholder="Select Condition"
-                  onChange={(e) => setTokenGateConditionType(e.target.value)}
-                  value={tokenGateConditionType}
-                >
-                  <option value="HAVE_HANDLE">Have Lens Handle</option>
-                  <option value="FOLLOW_HANDLE">Follow Lens Handle</option>
-                  <option value="MIRROR_POST">Mirror a Post</option>
-                  <option value="COLLECT_POST">Collect a Post</option>
-                </Select>
-              </FormControl>
-            )}
+                <FormControl id="token-gate-value">
+                  <FormLabel>Contract Address</FormLabel>
+                  <Input
+                    type="text"
+                    placeholder="Enter Contract Address"
+                    onChange={(e) => setContractAddress(e.target.value)}
+                  />
+                </FormControl>
 
-            {tokenGateCondition === "CYBERCONNECT" && (
-              <FormControl id="select-lens-condition">
-                <FormLabel>Select Condition</FormLabel>
-                <Select
-                  placeholder="Select Condition"
-                  onChange={(e) => setTokenGateConditionType(e.target.value)}
-                  value={tokenGateConditionType}
-                >
-                  <option value="HAVE_HANDLE">Have Cyberconnect Handle</option>
-                  <option value="FOLLOW_HANDLE">
-                    Follow Cyberconnect Profile
-                  </option>
-                </Select>
-              </FormControl>
-            )}
-
-            {!["HAVE_HANDLE", "HAVE_CYBERCONNECT_HANDLE"].includes(
-              tokenGateConditionType
-            ) && (
-              <FormControl id="token-gate-value">
-                <FormLabel>
-                  {["NFT", "POAP"].includes(tokenGateCondition)
-                    ? "Contract Address"
-                    : tokenGateCondition === "LENS"
-                    ? tokenGateConditionType === "FOLLOW_HANDLE"
-                      ? "Enter Lens Handle"
-                      : "Enter Post Link"
-                    : "Enter Follower Profile"}
-                </FormLabel>
-                <Input
-                  type="text"
-                  placeholder={
-                    ["NFT", "POAP"].includes(tokenGateCondition)
-                      ? "Enter Contract Address"
-                      : tokenGateCondition === "LENS"
-                      ? tokenGateConditionType === "FOLLOW_HANDLE"
-                        ? "Enter Lens Handle e.g. huddle01.lens"
-                        : "Paste lenster link e.g. https://lenster.xyz/posts/.."
-                      : "Enter Follower Profile"
-                  }
-                  onChange={(e) => setTokenGateConditionValue(e.target.value)}
-                />
-              </FormControl>
-            )}
-
+                {tokenType === "ERC1155" && (
+                  <FormControl id="token-gate-value">
+                    <FormLabel>Token ID</FormLabel>
+                    <Input
+                      type="text"
+                      placeholder="Enter Token ID"
+                      onChange={(e) => setContractAddress(e.target.value)}
+                    />
+                  </FormControl>
+                )}
+              </>
+            }
             <Button
               variant={"solid"}
               bgColor={"blue.500"}
