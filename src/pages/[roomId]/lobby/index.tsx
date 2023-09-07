@@ -16,7 +16,7 @@ import AvatarWrapper from "@/components/common/AvatarWrapper";
 import useStore from "@/store/slices";
 
 // Hooks
-import { useHuddle01, useLobby, useRoom } from "@huddle01/react/hooks";
+import { useEventListener, useHuddle01, useLobby, useRoom } from "@huddle01/react/hooks";
 
 const Lobby = () => {
   // Local States
@@ -71,14 +71,13 @@ const Lobby = () => {
       }
       return;
     }
-  }, [isLobbyJoined]);
+  }, [isLobbyJoined, roomId]);
 
   useEffect(() => {
     if (accessToken && roomId) {
       joinLobby(roomId, accessToken);
     }
   }, [accessToken]);
-
   const handleStartSpaces = () => {
     if (!isLobbyJoined) return;
 
@@ -89,6 +88,10 @@ const Lobby = () => {
       joinRoom();
     }
   };
+
+  useEventListener("lobby:failed", () => {
+    toast.error("Failed to join lobby");
+  })
 
   useEffect(() => {
     if (isRoomJoined) {
